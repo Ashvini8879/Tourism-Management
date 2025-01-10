@@ -1,0 +1,301 @@
+{% include "header.html" %}
+
+<header class="masthead" style="background-color: #9aa29a; color: rgb(9, 6, 6);">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      
+      <!-- Combined Trip Info and Traveler Details in One Row -->
+      <div class="col-md-12 mb-4">
+        <div class="row">
+           
+
+              <!-- Left Section: Trip Info (70% width) -->
+           <div class="col-md-7 mb-4">
+            <form method="POST" action="/submit_travelers">
+              <div class="traveler-form" style="background-color: #ece4e4; padding: 30px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                
+                   <!-- Traveler Count -->
+              <h2 class="display-6" style="color:  #024e51;">How Many are Travelling?</h2>
+              <div class="traveler-controls mb-4">
+                <br>
+                <button type="button" class="btn btn-warning" onclick="changeTravelerCount(-1)">Remove Traveler</button>
+                <span class="traveler-count mx-3" id="travelerCount">1</span>
+                <button type="button" class="btn btn-success" onclick="changeTravelerCount(1)">Add Traveler</button>
+              </div>
+
+
+                <h2 class="display-6" style="color:  #024e51;">Traveler Details</h2>
+
+                <!-- Lead Traveler (Always visible) -->
+                <div class="traveler mb-4" id="traveler1" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
+                  <h3 class="h5" style="color: #024e51;">Lead Traveler</h3>
+
+                  <!-- Hidden field for Tour Name -->
+                  <input type="hidden" name="tourName" value="{{ post.title }}">
+                  <input type="hidden" name="tourDate" value="{{ date }}">
+                  <input type="hidden" name="tourPrice" value="{{ price }}">
+
+                  <!-- First Name -->
+                  <div class="form-group">
+                    <label for="leadFirstName">First Name*</label>
+                    <input type="text" id="leadFirstName" name="leadFirstName" class="form-control" required>
+                  </div>
+
+                  <!-- Last Name -->
+                  <div class="form-group">
+                    <label for="leadLastName">Last Name*</label>
+                    <input type="text" id="leadLastName" name="leadLastName" class="form-control" required>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="form-group">
+                    <label for="leadEmail">Email Address*</label>
+                    <input type="email" id="leadEmail" name="leadEmail" class="form-control" required placeholder="example@domain.com">
+                    <small id="emailError" style="color: red; display: none;">Please enter a valid email address.</small>
+                  </div>
+
+                  <!-- Phone -->
+                  <div class="form-group">
+                    <label for="leadPhone">Phone Number*</label>
+                    <input type="tel" id="leadPhone" name="leadPhone" class="form-control" required placeholder="+91 099876 54321" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number">
+                  </div>
+
+                  <!-- Date of Birth -->
+                  <div class="form-group">
+                    <label for="leadDobDay">Date of Birth*</label>
+                    <div class="d-flex">
+                      <input type="date" id="leadDobDay" name="leadDobDay" class="form-control" required>
+                    </div>
+                  </div>
+
+                  <!-- Gender -->
+                  <div class="form-group">
+                    <label for="leadGender">Gender*</label>
+                    <select id="leadGender" name="leadGender" class="form-control" required>
+                      <option value="">Select Gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+
+                  <!-- Nationality -->
+                  <div class="form-group">
+                    <label for="leadNationality">Nationality*</label>
+                    <select id="leadNationality" name="leadNationality" class="form-control" required>
+                      <option value="">Select your nationality</option>
+                      <option value="Indian">Indian</option>
+      
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Additional Travelers (Dynamic) -->
+                <div class="additional-travelers" id="travelerDetails"></div>
+
+                <div id="paymentSummary" style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+                  <h3 class="display-6" style="color: #024e51;">Payment Summary</h3>
+                  <!-- Total Price -->
+                  <div class="total-price mb-4">
+                    <br><h3>Total Price: <span id="totalPrice">{{ price }}</span></h3>
+                  </div>
+                  <button type="button" class="btn btn-primary" id="payNowButton">Pay Now</button>
+                </div>
+
+                <input type="hidden" name="travelerCount" id="travelerCountInput" value="1"> <!-- Update this value dynamically -->
+                <br>  <button type="submit" class="btn btn-primary" id="confirmTourButton" disabled>Confirm Tour</button>
+                <br><small id="confirmDisabledMessage" style="color: red;">Please complete the payment to enable this button.</small>
+              </div>
+            
+            </form>
+          </div>
+
+
+          <!-- Right Section: Traveler Form (30% width) -->
+       
+          <div class="col-md-5 mb-4">
+            <div class="trip-info" style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);">
+              <h2 class="display-6" style="color: #024e51;">Trip Information</h2>
+              <p><strong>Post Title:</strong> {{ post.title }}</p>
+              <p><strong>Post Date:</strong> {{ date }}</p>
+              <p class="price lead" style="font-size: 1.2rem; color: #333;">Original Price (per traveler): {{ price }}</p>
+
+           
+            </div>
+          </div>
+
+         
+
+        </div> <!-- End of inner row -->
+      </div> <!-- End of the column containing both sections -->
+
+    </div> <!-- End of main row -->
+  </div> <!-- End of container -->
+</header>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  var originalPrice = parseFloat("{{ price }}");
+  var travelerCount = 1;
+
+  // Function to update the traveler count and price
+  function changeTravelerCount(change) {
+    travelerCount += change;
+
+    // Ensure traveler count does not go below 1
+    if (travelerCount < 1) travelerCount = 1;
+
+    document.getElementById("travelerCount").innerText = travelerCount;
+    document.getElementById("travelerCountInput").value = travelerCount;
+
+    const travelerDetailsContainer = document.getElementById("travelerDetails");
+
+    // Clear extra travelers if count decreased
+    while (travelerDetailsContainer.children.length > travelerCount - 1) {
+      travelerDetailsContainer.removeChild(travelerDetailsContainer.lastChild);
+    }
+
+    // Add additional travelers if count increased
+    for (var i = travelerDetailsContainer.children.length + 2; i <= travelerCount; i++) {
+      const travelerDiv = document.createElement("div");
+      travelerDiv.classList.add("traveler", "mb-4");
+      travelerDiv.style =
+        "background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);";
+      travelerDiv.innerHTML = `
+        <h3 class="h5" style="color: #024e51;">Traveler ${i}</h3>
+        <div class="form-group">
+          <label for="traveler${i}FirstName">First Name*</label>
+          <input type="text" id="traveler${i}FirstName" name="traveler${i}FirstName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}LastName">Last Name*</label>
+          <input type="text" id="traveler${i}LastName" name="traveler${i}LastName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}Email">Email Address*</label>
+          <input type="email" id="traveler${i}Email" name="traveler${i}Email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}Phone">Phone Number*</label>
+          <input type="tel" id="traveler${i}Phone" name="traveler${i}Phone" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}Dob">Date of Birth*</label>
+          <input type="date" id="traveler${i}Dob" name="traveler${i}Dob" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}Gender">Gender*</label>
+          <select id="traveler${i}Gender" name="traveler${i}Gender" class="form-control" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="traveler${i}Nationality">Nationality*</label>
+          <select id="traveler${i}Nationality" name="traveler${i}Nationality" class="form-control" required>
+            <option value="">Select your nationality</option>
+            <option value="Indian">Indian</option>
+            <option value="Japan">Japan</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      `;
+      travelerDetailsContainer.appendChild(travelerDiv);
+    }
+
+    updateTotalPrice();
+  }
+
+  const leadPhoneInput = document.getElementById('leadPhone');
+
+  leadPhoneInput.addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 10);
+  });
+
+  function validateForm() {
+  var allInputs = document.querySelectorAll("input, select");
+  var valid = true;
+
+  allInputs.forEach(function (input) {
+    // Check if the field is empty
+    if (!input.value) {
+      input.style.border = "2px solid red";
+      valid = false;
+    } else {
+      input.style.border = "1px solid #ced4da";
+    }
+
+    // Email validation
+    if (input.type === "email") {
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailPattern.test(input.value)) {
+        input.style.border = "2px solid red";
+        valid = false;
+        alert("Please enter a valid email address.");
+      }
+    }
+  });
+
+  return valid;
+}
+
+  // Razorpay Payment Integration
+  document.getElementById("payNowButton").addEventListener("click", function () {
+    if (!validateForm()) {
+      alert("Please fill all required fields correctly.");
+      return;
+    }
+
+    var totalPrice = originalPrice * travelerCount;
+
+    var options = {
+      key: "rzp_test_IGp0eRPgtHcqQ2", // Replace with your Razorpay key
+      amount: totalPrice * 100, // Amount in paise
+      currency: "INR",
+      name: "Trip Payment",
+      description: "Payment for trip",
+      handler: function (response) {
+        // Enable the Confirm Tour button
+        document.getElementById("confirmTourButton").disabled = false;
+
+        // Hide the disabled message
+        document.getElementById("confirmDisabledMessage").style.display = "none";
+
+        // Optionally, display a success message
+        alert("Payment successful! You can now confirm your tour.");
+      },
+      prefill: {
+        name: document.getElementById("leadFirstName").value + " " + document.getElementById("leadLastName").value,
+        email: document.getElementById("leadEmail").value,
+        contact: document.getElementById("leadPhone").value,
+      },
+    };
+
+        var rzp1 = new Razorpay(options);
+      // Open Razorpay Checkout
+      rzp1.open();
+      // Prevent the default form submission
+      event.preventDefault();
+            });
+
+        document.getElementById("tourForm").addEventListener("submit", function (e) {
+            if (document.getElementById("confirmTourButton").disabled) {
+                e.preventDefault();
+                alert("Please complete the payment first.");
+            } else {
+                alert("Tour confirmed successfully!");
+            }
+        });
+
+  // Function to update the total price
+  function updateTotalPrice() {
+    var totalPrice = travelerCount * originalPrice;
+    document.getElementById("totalPrice").innerText = totalPrice.toFixed(2);
+  }
+</script>
+
+{% include "footer.html" %}

@@ -1,0 +1,100 @@
+{% include "header.html" %}
+
+<style>
+    .wishlist-container {
+        background-color: #f8f9fa; /* Light background */
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+    .list-group-item {
+        background-color: #ffffff; /* White background for items */
+        border: none; /* No borders for list items */
+        padding: 15px;
+        transition: background-color 0.3s, transform 0.2s; /* Smooth hover effect */
+        border-radius: 5px; /* Rounded edges */
+    }
+    .list-group-item:hover {
+        background-color: #f0f0f0; /* Light gray on hover */
+        transform: scale(1.02); /* Slight zoom */
+    }
+    .wishlist-link {
+        font-size: 1.1em;
+        font-weight: 600; /* Make it bolder */
+    }
+    .btn-remove {
+        background-color: #dc3545;
+        color: white;
+        font-size: 0.9em;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn-remove:hover {
+        background-color: #b02a37;
+        transform: scale(1.1); /* Button hover zoom */
+    }
+    .empty-wishlist {
+        color: #6c757d; /* Gray text for empty state */
+    }
+</style>
+
+<!-- Page Header -->
+<header
+    class="masthead"
+    style="background-image: url('../static/assets/img/wishlist_b.webp'); background-size: cover; background-position: center;">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading text-center">
+                    <h1>Your Wishlist</h1>
+                    <span class="subheading">A collection of your favorite tours.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Feedback Section -->
+<div class="container px-4 px-lg-5 mt-4">
+    {% if request.args.get('message') %}
+        <div class="alert alert-success text-center" role="alert">
+            {{ request.args.get('message') }}
+        </div>
+    {% elif request.args.get('error') %}
+        <div class="alert alert-danger text-center" role="alert">
+            {{ request.args.get('error') }}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Main Content -->
+<div class="container px-4 px-lg-5 py-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <div class="wishlist-container p-4">
+                {% if wishlist_items %}
+                    <h2 class="text-center mb-4">Explore Your Favorites</h2>
+                    <ul class="list-group">
+                        {% for item in wishlist_items %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="{{ url_for('show_post', post_id=item.post.id) }}" 
+                                   class="wishlist-link text-decoration-none text-dark" 
+                                   aria-label="View details of {{ item.post.title }}">
+                                    {{ item.post.title }}
+                                </a>
+                                <form action="{{ url_for('remove_from_wishlist', item_id=item.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-remove btn-sm" aria-label="Remove {{ item.post.title }} from wishlist">
+                                        Remove
+                                    </button>
+                                </form>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <h2 class="text-center empty-wishlist mb-4">Your Wishlist is Currently Empty</h2>
+                    <p class="text-center empty-wishlist">Start exploring and adding your favorites!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}

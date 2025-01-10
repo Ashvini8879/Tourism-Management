@@ -1,0 +1,54 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('../static/assets/img/tours.jpg')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          {% if is_edit %}
+            <h1>Edit Post</h1>
+          {% else %}
+            <h1>New Tour</h1>
+          {% endif %}
+          <span class="subheading">Create a new tour with destinations, highlights, and itinerary details!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="mb-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <h3>Tour Information</h3>
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+
+        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+    // Optional: Custom CKEditor configuration for the 'body' field
+    CKEDITOR.replace('body', {
+        toolbar: [
+            { name: 'document', items: ['Source', '-', 'Preview'] },
+            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', '-', 'Undo', 'Redo'] },
+            { name: 'editing', items: ['Find', 'Replace', '-', 'Scayt'] },
+            '/',
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline'] },
+            { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'] }
+        ],
+        height: 300,
+    });
+</script>
+
+{% include "footer.html" %}
+{% endblock %}

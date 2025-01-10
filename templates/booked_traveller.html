@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booked Travelers</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            font-size: 14px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{{ url_for('get_all_posts') }}" class="btn btn-secondary me-4">Back</a>
+            <h1 class="text-center">Booked Travelers</h1>
+        </div>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tour Name</th>
+                    <th>Tour Date</th>
+                    <th>Tour Price</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date of Birth</th>
+                    <th>Gender</th>
+                    <th>Nationality</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for traveler in travelers %}
+                <tr>
+                    <td>{{ traveler.id }}</td>
+                    <td>{{ traveler.tour_name }}</td>
+                    <td>{{ traveler.tour_date }}</td>
+                    <td>{{ traveler.tour_price }}</td>
+                    <td>{{ traveler.first_name }}</td>
+                    <td>{{ traveler.last_name }}</td>
+                    <td>{{ traveler.email }}</td>
+                    <td>{{ traveler.phone }}</td>
+                    <td>{{ traveler.dob }}</td>
+                    <td>{{ traveler.gender }}</td>
+                    <td>{{ traveler.nationality }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+
+

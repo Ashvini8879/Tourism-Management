@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Tour Itinerary</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+   
+    <style>
+        body {
+            background-image: url("https://tse2.mm.bing.net/th?id=OIP.bXbX7pNDpTA8ShDImtSazQHaEo&pid=Api&P=0&h=180");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: auto; /* Allows scrolling if content overflows */
+        }
+
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .itinerary-day {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .itinerary-title {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: #495057;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn { 
+            background: none; 
+            border: none; 
+            color: red; 
+            cursor: pointer; 
+            font-size: 1.25rem; 
+        }
+
+        .add-day-btn {
+            background-color: #829ab3; 
+            color: white; 
+            transition: background-color 0.3s;
+        }
+
+        .add-day-btn:hover { 
+            background-color: #0056b3; 
+        }
+
+        .submit-btn {
+            width: auto;
+            font-size: 0.875rem;
+            padding: 8px 20px;
+        }
+    </style>
+
+    <script>
+        function addItineraryDay() {
+            const itineraryContainer = document.getElementById("itinerary-container");
+            const dayCount = itineraryContainer.children.length + 1;
+            const newDay = document.createElement("div");
+            newDay.classList.add("itinerary-day");
+            newDay.innerHTML = `
+                <div class="itinerary-title">Day ${dayCount}
+                    <button class="delete-btn" onclick="removeItineraryDay(this)">✖</button>
+                </div>
+                <div class="mb-3">
+                    <label for="itinerary-day-${dayCount}" class="form-label">Day Title</label>
+                    <input type="text" name="itinerary-day[]" id="itinerary-day-${dayCount}" class="form-control" placeholder="Enter day title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="itinerary-description-${dayCount}" class="form-label">Description</label>
+                    <textarea name="itinerary-description[]" id="itinerary-description-${dayCount}" class="form-control" rows="4" placeholder="Enter day description" required></textarea>
+                </div>
+            `;
+            itineraryContainer.appendChild(newDay);
+        }
+
+        function removeItineraryDay(button) {
+            const dayElement = button.closest('.itinerary-day');
+            dayElement.remove();
+            updateDayTitles();
+        }
+
+        function updateDayTitles() {
+            const itineraryContainer = document.getElementById("itinerary-container");
+            const days = itineraryContainer.children;
+            for (let i = 0; i < days.length; i++) {
+                const dayTitle = days[i].querySelector('.itinerary-title');
+                dayTitle.innerHTML = `Day ${i + 1} <button class="delete-btn" onclick="removeItineraryDay(this)">✖</button>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="mb-4">Create Tour Itinerary</h1>
+        <form method="POST" action="{{ url_for('create_itinerary') }}">
+            <div class="mb-4">
+                <h3>Itinerary</h3>
+                <input type="hidden" name="tour_id" value="{{ tour_id }}">
+                <button type="button" class="btn add-day-btn mb-3" onclick="addItineraryDay()">+ Add Day</button>
+                <div id="itinerary-container"></div>
+            </div>
+            <button type="submit" class="btn btn-primary submit-btn mt-1">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
